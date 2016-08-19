@@ -4,4 +4,3 @@
 
 ![image](https://github.com/GillMo/MenuDemo/blob/master/imgs/a.png)
 
-![image](https://github.com/GillMo/MenuDemo/blob/master/imgs/b.png)
