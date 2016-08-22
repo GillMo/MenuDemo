@@ -103,6 +103,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         //init city menu
         final ListView cityView = new ListView(this);
         cityAdapter = new GirdDropDownAdapter(this, Arrays.asList(citys));
+        cityView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView,int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0){
+                    mySwipeRefreshLayout.setEnabled(true);
+                }else{
+                    mySwipeRefreshLayout.setEnabled(false);
+                }
+            }
+        });
         cityView.setDividerHeight(0);
         cityView.setAdapter(cityAdapter);
 
