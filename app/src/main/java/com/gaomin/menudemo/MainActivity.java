@@ -36,15 +36,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private List<View> popupViews = new ArrayList<>();
     private View footerView;
 
+    private ArrayAdapter arrayAdapter;
     private GirdDropDownAdapter cityAdapter;
-    private ListDropDownAdapter ageAdapter;
     private ConstellationAdapter constellationAdapter;
+    private ListDropDownAdapter ageAdapter;
 
     private String headers[] = {"城市","年龄","星座"};
     private String citys[] = {"不限", "武汉", "北京", "上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州", "深圳", "重庆", "天津", "西安", "南京", "杭州"};
     private String ages[] = {"不限", "18岁以下", "18-22岁", "23-26岁", "27-35岁", "35岁以上"};
     private String constellations[] = {"不限", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"};
-    ArrayAdapter arrayAdapter;
     private List<String> mDatas;
     
     private int constellationPosition = 0;
@@ -103,21 +103,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         //init city menu
         final ListView cityView = new ListView(this);
         cityAdapter = new GirdDropDownAdapter(this, Arrays.asList(citys));
-        cityView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView,int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem == 0){
-                    mySwipeRefreshLayout.setEnabled(true);
-                }else{
-                    mySwipeRefreshLayout.setEnabled(false);
-                }
-            }
-        });
+        cityView.setOnScrollListener(OnScrollBlock());
         cityView.setDividerHeight(0);
         cityView.setAdapter(cityAdapter);
 
@@ -125,11 +111,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         final ListView ageView = new ListView(this);
         ageAdapter = new ListDropDownAdapter(this, Arrays.asList(ages));
         ageView.setDividerHeight(0);
+        ageView.setOnScrollListener(OnScrollBlock());
         ageView.setAdapter(ageAdapter);
 
         //init constellation
         final View constellationView = getLayoutInflater().inflate(R.layout.custom_layout, null);
         GridView constellation = ButterKnife.findById(constellationView, R.id.constellation);
+
         constellationAdapter = new ConstellationAdapter(this, Arrays.asList(constellations));
         constellation.setAdapter(constellationAdapter);
         TextView ok = ButterKnife.findById(constellationView, R.id.ok);
@@ -234,6 +222,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         myListView.setAdapter(arrayAdapter);
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, myListView);
     }
+
+    private AbsListView.OnScrollListener OnScrollBlock() {
+        return new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView,int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                mySwipeRefreshLayout.setEnabled(false);
+            }
+        };
+    }
+
     class MyRunnable implements Runnable{
         @Override
         public void run() {
